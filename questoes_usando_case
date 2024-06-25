@@ -1,0 +1,85 @@
+-- Exemplo usando Case
+		
+SELECT 
+	saldo, id_cliente,
+	CASE
+		WHEN saldo >= 10000 THEN 'Saldo Alto'
+		WHEN saldo >= 1000	THEN 'Saldo Médio'
+		ELSE 'Saldo Baixo'
+	END AS tipo_saldo
+FROM
+	conta_corrente;
+	
+-- Contar o número total de clientes cadastrados e indicar se é um número alto, médio ou baixo
+
+SELECT 
+	COUNT(*) AS total_clientes,
+	CASE
+		WHEN COUNT(*) >= 10 THEN 'Número Alto'
+		WHEN COUNT(*) <= 5 THEN 'Número Médio'
+		ELSE 'Número Baixo'
+	END AS numero_clientes
+FROM
+	cliente;
+	
+-- Mostrar todas as movimentações do tipo 'saída' e indicar se o valor é maior que 1000 ou não
+
+SELECT 
+	tipo, valor,
+	CASE
+		WHEN valor > 1000 THEN 'Maior que 1000'
+		ELSE 'Valor menor que 1000'
+	END AS movimentacoes
+FROM
+	movimentacoes
+	WHERE tipo = 'saida'
+	
+-- Listar as agências ordenadas pelo nome em ordem alfabética e indicar se o nome começa com vogal ou consoante
+
+SELECT 
+	nome,
+	CASE
+		WHEN nome IN ('A%', 'E%', 'I%','O%', 'U%') THEN 'Volgal'
+		ELSE 'É Consoante'
+	END as agencias
+FROM
+	agencia
+	ORDER BY agencia ASC
+	
+-- Calcular o saldo médio das contas correntes e indicar se é um saldo alto, médio ou baixo
+	
+SELECT
+	saldo,
+	CASE
+		WHEN saldo >= (SELECT AVG (saldo) FROM conta_corrente) THEN 'Saldo Alto'
+		WHEN saldo <= (SELECT AVG (saldo) FROM conta_corrente) THEN 'Saldo Médio'
+		ELSE 'Saldo Baixo'
+	END AS tipo_saldo
+FROM
+	conta_corrente
+	
+-- Listar todas as contas correntes cadastradas com uma coluna indicando se o saldo é
+-- positivo, negativo ou zero
+
+SELECT 
+	saldo,
+	CASE
+		WHEN saldo < 0 THEN 'Saldo Negativo'
+		WHEN saldo > 0 THEN 'Saldo Positivo'
+		ELSE 'Saldo Zero'
+	END AS tipo_saldo
+FROM
+	conta_corrente
+	
+-- Listar os clientes ordenados pelo nome em ordem alfabética e indicar se o nome tem mais
+-- de 5 caracteres ou não . usar função LENGTH
+
+SELECT 
+	nome,
+	CASE
+		WHEN LENGTH(nome) > 5 THEN 'Mais de 5 Caracteres'
+		ELSE 'Menos de 5 Caracteres'
+	END AS nome_cliente
+FROM
+	cliente
+	ORDER BY nome ASC
