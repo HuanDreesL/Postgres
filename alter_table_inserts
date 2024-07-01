@@ -1,0 +1,40 @@
+SELECT *FROM cliente;
+
+-- CRIAR SOBRENOME
+
+ALTER TABLE cliente 
+ADD COLUMN sobrenome VARCHAR(100);
+	
+UPDATE cliente
+SET sobrenome = 'Ferreira'
+WHERE id = 10;
+
+ALTER TABLE cliente
+ADD COLUMN cidade VARCHAR(100);
+
+UPDATE cliente
+SET cidade = 'Guatambu'
+WHERE id IN (9,10);
+
+ALTER TABLE cliente
+ADD COLUMN estado VARCHAR(50);
+
+UPDATE cliente
+SET estado = 'Santa Catarina'
+WHERE id = 10;
+
+ALTER TABLE cliente
+ADD COLUMN endereco VARCHAR(100);
+
+UPDATE cliente
+SET endereco = 'Greenville'
+WHERE id = 10;
+
+ALTER TABLE cliente
+ADD COLUMN cep VARCHAR(20);
+
+UPDATE cliente
+SET cep = '83710-590'
+WHERE id = 3;
+
+
