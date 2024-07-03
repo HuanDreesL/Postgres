@@ -1,0 +1,132 @@
+SELECT * FROM cliente
+JOIN conta_corrente
+ON cliente.id = conta_corrente.id_cliente
+LEFT JOIN agencia
+ON conta_corrente.id_agencia = agencia.id;
+
+
+SELECT * FROM movimentacoes
+JOIN conta_corrente
+ON movimentacoes.id = conta_corrente.id;
+
+-- EXERCICIOS
+
+-- 1
+SELECT 
+	cliente.nome,
+	cliente.sobrenome, 
+	cliente.cidade, 
+	cliente.estado, 
+	cliente.endereco, 
+	cliente.cep 
+FROM 
+	cliente
+JOIN 
+	conta_corrente ON cliente.id = conta_corrente.id_cliente;
+
+-- 2
+SELECT 
+	cliente.nome, 
+	conta_corrente.saldo 
+FROM 
+	cliente
+JOIN 
+	conta_corrente ON cliente.id = conta_corrente.id_cliente 
+WHERE 
+	conta_corrente.saldo > 1000;
+
+-- 3
+ALTER TABLE conta_corrente
+ADD COLUMN tipo_conta VARCHAR(100);
+
+UPDATE conta_corrente 
+SET tipo_conta = 'Conta Salário'
+WHERE id IN (6,7,8,9,10);
+
+SELECT 
+	cliente.nome, 
+	conta_corrente.tipo_conta 
+FROM 
+	cliente
+JOIN 
+	conta_corrente ON cliente.id = conta_corrente.id_cliente;
+
+-- 4
+SELECT 
+	agencia.rua, 
+	agencia.numero, 
+	agencia.bairro,
+	agencia.cidade,
+	COUNT(conta_corrente.id) AS total_conta_corrente
+FROM 
+	agencia
+JOIN 
+	conta_corrente ON agencia.id = conta_corrente.id_agencia
+GROUP BY
+	agencia.rua,
+	agencia.numero,
+	agencia.bairro,
+	agencia.cidade;
+	
+-- 5
+SELECT * 
+FROM 
+	cliente
+JOIN 
+	conta_corrente ON cliente.id = conta_corrente.id_cliente
+WHERE conta_corrente.tipo_conta = 'Poupança';
+
+-- 6
+SELECT * FROM cliente
+JOIN conta_corrente
+ON cliente.id = conta_corrente.id_cliente;
+
+-- 7 
+SELECT 
+	conta_corrente.numero, 
+	agencia.nome,
+	COUNT(conta_corrente.numero) as total_conta_corrente
+FROM 
+	agencia
+LEFT JOIN 
+	conta_corrente ON agencia.id = conta_corrente.id_agencia
+GROUP BY
+	agencia.nome,
+	conta_corrente.numero;
+
+-- 8
+SELECT 
+	conta_corrente.tipo_conta, 
+	cliente.nome 
+FROM 
+	cliente
+JOIN 
+	conta_corrente ON cliente.id = conta_corrente.id_cliente;
+
+-- 9
+SELECT 
+	cliente.nome, 
+	conta_corrente.tipo_conta, 
+	conta_corrente.numero
+FROM 
+	cliente
+JOIN 
+	conta_corrente ON cliente.id = conta_corrente.id_cliente;
+	
+-- 10
+SELECT 
+	cliente.nome,
+	conta_corrente.numero,
+	conta_corrente.tipo_conta,
+	conta_corrente.saldo
+FROM
+	cliente
+JOIN
+	conta_corrente ON cliente.id = conta_corrente.id_cliente
+	WHERE conta_corrente.tipo_conta = 'Poupança';
+
+
+
+
+
+
