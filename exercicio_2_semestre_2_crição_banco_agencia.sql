@@ -202,3 +202,19 @@ FROM
 LEFT JOIN
 	ContaCorrente
 ON Cliente.IDCliente = ContaCorrente.IDCliente;
+
+-- EXEMPLO INNER JOIN COM 3 TABELAS
+
+SELECT 
+	Cliente.nome,
+	Cliente.CPF,
+	ContaCorrente.Numero,
+	Agencia.NomeAgencia
+FROM
+	Cliente
+INNER JOIN
+	ContaCorrente
+ON Cliente.IDCliente = ContaCorrente.IDCliente
+INNER JOIN
+	Agencia
+ON Agencia.IDAgencia = ContaCorrente.IDAgencia;
