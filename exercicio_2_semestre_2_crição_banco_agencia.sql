@@ -1,4 +1,3 @@
-/// Feito Pelo Professor
 	
 CREATE TABLE Estado (
     IDEstado SERIAL PRIMARY KEY,
