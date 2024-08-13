@@ -218,3 +218,236 @@ ON Cliente.IDCliente = ContaCorrente.IDCliente
 INNER JOIN
 	Agencia
 ON Agencia.IDAgencia = ContaCorrente.IDAgencia;
+
+-- 1 LISTAR TODOS OS CLIENTES JUNTO COM O NOME DA CIDADE
+
+SELECT 
+	Cliente.nome,
+	Cidade.nome
+FROM
+	Cliente
+INNER JOIN
+	Cidade
+ON Cliente.idcidade = Cidade.idcidade;
+
+-- 2 OBTER A LISTA DE CONTAS CORRENTES JUNTO COM O NOME DA AGENCIA QUE PERTECEM 
+
+SELECT 
+	ContaCorrente.numero,
+	Agencia.nomeagencia
+FROM 
+	ContaCorrente
+INNER JOIN
+	Agencia
+ON ContaCorrente.idagencia = Agencia.idagencia;
+
+-- 3 MOSTRAR O ONOME E CPF DOS CLIENTES QUE TEM UMA CONTA CORRENTE COM SALDO MAIOR QUE 1000
+
+SELECT 
+	Cliente.cpf,
+	Cliente.nome,
+FROM
+	Cliente
+INNER JOIN
+	ContaCorrente
+ON 
+	Cliente.idcliente = ContaCorrente.idcliente
+WHERE 
+	ContaCorrente.saldo > 1000;
+
+-- 4 LISTAR TODAS AS MOVIMENTAÇÕES COM OS NÚMEROS DAS CONTAS E OS NOMES DOS CLIENTE ASSOCIADOS
+
+SELECT 
+	ContaCorrente.numero,
+	Cliente.nome,
+	Movimentacao.*
+FROM
+	ContaCorrente
+INNER JOIN
+	Movimentacao
+ON
+	ContaCorrente.id = Movimentacao.idcontacorrente
+INNER JOIN
+	Cliente
+ON
+	Cliente.idcliente = ContaCorrente.idcliente;
+
+-- 5 EXIBIR NOME DA CIDADE ONDE CADA AGENCIA ESTÁ LOCALIZADA
+
+SELECT 
+	Cidade.nome,
+	Agencia.nomeagencia
+FROM
+	Cidade
+INNER JOIN
+	Agencia
+ON
+	Agencia.idcidade = Cidade.idcidade;
+
+-- 6 MOSTRAR O NOME DO CLIENTE, O NUMERO DA CONTA E O SALDO PARA TODOS OS CLIENTE 
+-- COM UMA CONTA EM UMA GENCIA ESPECIFICA (POR EXEMPLO IDAgencia = 1)
+
+SELECT 
+	Cliente.nome,
+	ContaCorrente.numero,
+	ContaCorrente.saldo,
+FROM 	
+	ContaCorrente
+INNER JOIN
+	Cliente
+ON
+	ContaCorrente.id = Cliente.idcliente
+INNER JOIN
+	Agencia
+ON
+	ContaCorrente.idagencia = Agencia.idagencia
+WHERE 
+	Agencia.idagencia = 1;
+	
+-- 7 LISTAR TODOS OS CLIENTES E SUAS RESPECTIVAS CIDADES, JUNTAMENTO COM O NOME DO 
+-- ESTADO AO QUAL CIDADE PERTENCE
+
+SELECT 
+	Cliente.*,
+	Cidade.nome
+FROM
+	Cliente
+INNER JOIN
+	Cidade
+ON
+	Cliente.idcidade = Cidade.idcidade;
+
+-- 8 EXIBIR O NOME DA AGENCIA E O ENDERECO DA CIDADE ONDE A AGENCIA ESTÁ LOCALIZADA
+
+SELECT 
+	Agencia.nomeagencia,
+	Agencia.rua,
+	Agencia.bairro,
+	Agencia.cep,
+	Cidade.nome
+FROM
+	Agencia
+INNER JOIN
+	Cidade
+ON	
+	Agencia.idcidade = Cidade.idcidade;
+	
+-- 9 MOSTRAR A SOMA TOTAL DOS VALORES DAS MOVIMENTAÇÕES PARA CADA CONTA CORRENTE
+
+SELECT
+	ContaCorrente.*,
+	SUM(Movimentacao.valor) AS total_movimentacoes
+FROM
+	ContaCorrente
+INNER JOIN
+	Movimentacao
+ON
+	ContaCorrente.id = Movimentacao.idcontacorrente
+GROUP BY
+	ContaCorrente.*, ContaCorrente.id;
+	
+-- 10 LISTAR O NOME DOS CLIENTES E O SALDO DE SUAS CONTAS, ORDENADOS PELO 
+-- SALDO EM ORDEM DECRECENTE
+
+SELECT
+	Cliente.nome,
+	ContaCorrente.saldo
+FROM
+	Cliente
+INNER JOIN
+	ContaCorrente
+ON
+	ContaCorrente.idcliente = Cliente.idcliente
+ORDER BY
+	ContaCorrente.saldo DESC;
+	
+-- 11 MOSTRAR LISTA DE CLIENTES QUE NÃO TEM NENHUMA MOVIMENTAÇÃO REGISTRADA
+
+SELECT 
+	Cliente.nome,
+	Movimentacao.*
+FROM
+	Cliente
+LEFT JOIN
+	ContaCorrente
+ON
+	ContaCorrente.idcliente = Cliente.idcliente
+LEFT JOIN
+	Movimentacao
+ON 
+	ContaCorrente.id = Movimentacao.idcontacorrente
+WHERE
+	Movimentacao.id IS NULL;
+
+-- 12 EXIBIR O NOME DA CIDADE E O NOME DO ESTADO PARA CADA CLIENTE
+
+SELECT 
+	Cidade.nome,
+	Estado.nome,
+	Cliente.nome
+FROM
+	Cidade
+INNER JOIN
+	Estado
+ON
+	Cidade.idestado = Estado.idestado
+INNER JOIN
+	Cliente
+ON
+	Cidade.idcidade = Cliente.idcidade;
+
+-- 13 MOSTRAR TODAS AS CONTAS CORRENTES QUE PERTECEM A CLIENTES DE UMA CIDADE ESPECIFICA
+-- POR EXEMPLO CIDADE COM ID = 2
+
+SELECT 
+	ContaCorrente.numero,
+	Cliente.nome,
+	Cidade.nome
+FROM
+	ContaCorrente
+INNER JOIN
+	Cliente
+ON 
+	ContaCorrente.idcliente = Cliente.idcliente
+INNER JOIN
+	Cidade
+ON
+	Cidade.idcidade = Cliente.idcidade
+WHERE
+	Cidade.idcidade = 2;
+	
+-- 14 LISTAR OS CLIENTES QUE TÊM CONTAS COM SALDO INFERIOR A 500 E SUAS RESPECTIVAS CIDADE
+
+SELECT 
+	Cliente.nome,
+	ContaCorrente.saldo,
+	Cidade.nome
+FROM
+	Cliente
+INNER JOIN
+	ContaCorrente
+ON
+	ContaCorrente.idcliente = Cliente.idcliente
+INNER JOIN
+	Cidade
+ON
+	Cidade.idcidade = Cliente.idcidade
+WHERE
+	ContaCorrente.saldo < 500;
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
