@@ -230,4 +230,75 @@ LANGUAGE PLPGSQL;
 
 select *from buscar_por_id(12);
 
+-- 1-Crie uma função que atualize o saldo de uma conta corrente com
+-- base no número da conta e o novo valor do saldo.
+
+CREATE OR REPLACE FUNCTION atualizar_saldo (p_numero_conta VARCHAR, p_novo_saldo FLOAT)
+RETURNS VOID AS $$
+BEGIN 
+	UPDATE contaCorrente 
+	SET saldo = p_novo_saldo
+	WHERE numero = p_numero_conta;
+END;
+$$ LANGUAGE PLPGSQL;
+
+SELECT atualizar_saldo('1234567890', 1499);
+
+-- 2-Crie uma função que exclua um cliente e todas as contas correntes
+-- associadas a esse cliente. Isso deve incluir a exclusão de movimentos
+-- associados às contas correntes do cliente.
+
+CREATE OR REPLACE FUNCTION excluir_cliente (p_id_cliente INT)
+RETURNS VOID AS $$
+BEGIN
+
+	DELETE FROM movimentacao
+	WHERE idcontaCorrente IN (
+		SELECT id
+		FROM contaCorrente
+		WHERE idcliente = p_id_cliente
+	);
+	
+	DELETE FROM contaCorrente
+	WHERE idcliente = p_id_cliente;
+	
+	DELETE FROM cliente
+	WHERE idCliente = p_id_cliente;
+	
+END;
+$$ LANGUAGE PLPGSQL;
+
+SELECT excluir_cliente(1);
+
+-- 3-Função para Atualizar o Endereço de uma Agência.
+CREATE OR REPLACE FUNCTION atualizar_endereco(
+	p_id_agencia INT,
+	p_rua VARCHAR(255),
+	p_numero VARCHAR(10),
+	p_complemente VARCHAR(100),
+	p_bairro VARCHAR(100),
+	p_cep VARCHAR(10),
+	p_id_cidade INTEGER
+) 
+RETURNS VOID AS $$
+BEGIN 
+	UPDATE agencia
+	SET 
+	rua = p_rua,
+	numero = p_numero,
+	complemento = p_complemente,
+	bairro = p_bairro,
+	cep = p_cep,
+	idcidade = p_id_cidade
+	WHERE idagencia = p_id_agencia;
+END;
+$$ LANGUAGE PLPGSQL;
+	
+SELECT atualizar_endereco(1, 'Paulista Avenida', '0001', '101 Sala', 'Vista Bela', '000-01310', 2);
+
+-- 4- Função para Listar Movimentações de uma Conta Corrente com
+-- Detalhes do Cliente.
+
+	
+
 
