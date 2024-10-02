@@ -121,3 +121,138 @@ END $$;
 
 CALL deletar_cliente (3);
 
+--------------------------------------------------
+
+CREATE OR REPLACE PROCEDURE criar_cliente
+	(
+		p_id_cliente 			INT,
+		p_nome_cliente			VARCHAR,
+		p_cpf_cliente			VARCHAR,
+		p_endereco_cliente		VARCHAR,
+		p_rua_cliente			VARCHAR,
+		p_numero_rua_cliente	VARCHAR,
+		p_complemente_cliente	VARCHAR,
+		p_bairro_cliente		VARCHAR,
+		p_cep_cliente			INT,
+		p_cliente_telefone		VARCHAR,
+		p_id_cidade_cliente		INT
+	)
+LANGUAGE PLPGSQL
+AS $$
+BEGIN
+		INSERT INTO cliente
+			(
+				idcliente,
+				nome, 
+				cpf, 
+				endereco,
+				rua, 
+				numero, 
+				complemento, 
+				bairro,
+				cep, 
+				telefone,
+				idcidade
+			)
+			VALUES
+			(
+				p_id_cliente,
+				p_nome_cliente,
+				p_cpf_cliente,
+				p_endereco_cliente, 
+				p_rua_cliente, 
+				p_numero_rua_cliente,
+				p_complemente_cliente,
+				p_bairro_cliente, 
+				p_cep_cliente, 
+				p_cliente_telefone,
+				p_id_cidade_cliente
+			);
+RAISE NOTICE 'CLIENTE ADICIONADO COM SUCESSO.', p_nome_cliente;
+END
+$$;
+
+CALL criar_cliente(40, 'Huandres', '13426537931', 'Rua Legal', 'Rua mais Legal', '1', 'Casa Branca', 'Di Fiori', '89809890', '123', 2);
+ 
+select *from contaCorrente
+
+-- CRIAR PROCEDURE PARA LISTAR OS CLIENTE A PARTIR DO ID DA CIDADE
+
+CREATE OR REPLACE PROCEDURE lista_cliente_pela_cidade
+	(
+		p_id_cidade 	INT	
+	)
+LANGUAGE PLPGSQL AS $$
+	DECLARE v_cliente RECORD;
+BEGIN
+	FOR v_cliente IN
+		SELECT nome,cpf FROM cliente
+		WHERE idcidade = p_id_cidade
+	LOOP
+		RAISE NOTICE 'CLIENTE %', v_cliente.nome;
+	END LOOP;
+END;
+$$;
+
+-- CRIAR UMA FUNÇÃO ANONIMA PARA CHAMAR A PROCEDURE
+
+DO $$
+BEGIN
+	CALL lista_cliente_pela_cidade(2);
+END;
+$$;
+
+-- CRIAR PROCEDURE PARA LISTAR AS AGENCIAS PELO ID DA CIDADE
+
+CREATE OR REPLACE PROCEDURE lista_agencia_pelo_cidade 
+	(
+		p_id_cidade 	INT
+	)
+LANGUAGE PLPGSQL AS $$
+	DECLARE v_agencia RECORD;
+BEGIN
+	FOR v_agencia IN
+		SELECT nomeagencia, rua FROM agencia
+		WHERE idcidade = p_id_cidade
+	LOOP
+		RAISE NOTICE 'AGENCIA %', v_agencia.nomeagencia;
+	END LOOP;
+END;
+$$;
+
+-- CRIAR UMA FUNÇÃO ANONIMA PARA CHAMAR A PROCEDURE
+
+DO $$
+BEGIN
+	CALL lista_agencia_pelo_cidade(2);
+END;
+$$;
+
+-- CRIAR PROCEDURE PARA ATUALIZAR SALDO SAIDA
+
+CREATE OR REPLACE PROCEDURE atualizar_saldo_saida
+	(
+		IN p_idconta_corrente 	INT,
+		IN p_novo_saldo		DECIMAL,
+		OUT p_saldo_atual	DECIMAL
+	)
+LANGUAGE PLPGSQL AS $$
+BEGIN
+	UPDATE contaCorrente SET saldo = p_novo_saldo
+	WHERE id = p_idconta_corrente;
+	
+	SELECT saldo INTO p_saldo_atual FROM contaCorrente
+	WHERE id = p_idconta_corrente;
+END;
+$$;
+
+CALL atualizar_saldo_saida(10, 5000, 8000);
+
+SELECT *FROM contaCorrente
+
+
+
+
+
+
+
